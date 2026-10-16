@@ -95,36 +95,33 @@ public class MainActivity extends Activity {
 
     private void configureSystemBars() {
         Window window = getWindow();
-        window.setStatusBarColor(BG);
         if (Build.VERSION.SDK_INT >= 30) window.setDecorFitsSystemWindows(false);
-        window.setNavigationBarColor(BG);
+        window.setStatusBarColor(Color.TRANSPARENT);
+        window.setNavigationBarColor(Color.TRANSPARENT);
         window.setSoftInputMode(android.view.WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
-        window.getDecorView().setSystemUiVisibility(
-                View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR | View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR);
+        // Transparent bars reveal the app's full-height pearl gradient. Keep icons light.
+        window.getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_VISIBLE);
     }
 
     private void showSplash() {
-        getWindow().setStatusBarColor(NAVY);
-        getWindow().setNavigationBarColor(NAVY);
+        getWindow().setStatusBarColor(Color.TRANSPARENT);
+        getWindow().setNavigationBarColor(Color.TRANSPARENT);
         getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_VISIBLE);
         LinearLayout splash = new LinearLayout(this);
         splash.setOrientation(LinearLayout.VERTICAL);
         splash.setGravity(Gravity.CENTER);
-        splash.setPadding(dp(26), dp(24), dp(26), dp(24));
-        splash.setBackground(new GradientDrawable(
-                GradientDrawable.Orientation.TL_BR,
-                new int[]{Color.rgb(23, 18, 76), Color.rgb(55, 35, 125), Color.rgb(122, 48, 139)}));
+        splash.setPadding(dp(20), dp(28), dp(20), dp(24));
+        splash.setBackgroundResource(R.drawable.app_background);
 
+        // Use the transparent mascot artwork directly—no card, tile, or square frame.
         ImageView mascot = new ImageView(this);
         mascot.setImageResource(R.drawable.mascot);
         mascot.setScaleType(ImageView.ScaleType.FIT_CENTER);
-        LinearLayout logoWrap = new LinearLayout(this);
-        logoWrap.setGravity(Gravity.CENTER);
-        logoWrap.setBackground(background(Color.rgb(30, 22, 86), 34, Color.rgb(226, 173, 255), dp(1)));
-        logoWrap.setClipToOutline(true);
-        logoWrap.setElevation(dp(10));
-        logoWrap.addView(mascot, new LinearLayout.LayoutParams(dp(174), dp(174)));
-        splash.addView(logoWrap, new LinearLayout.LayoutParams(dp(200), dp(200)));
+        mascot.setAdjustViewBounds(true);
+        mascot.setBackgroundColor(Color.TRANSPARENT);
+        LinearLayout.LayoutParams mascotLp = new LinearLayout.LayoutParams(dp(300), dp(370));
+        mascotLp.gravity = Gravity.CENTER;
+        splash.addView(mascot, mascotLp);
 
         TextView brand = text("Pixel System", 30, WHITE, true);
         brand.setGravity(Gravity.CENTER);
@@ -148,10 +145,10 @@ public class MainActivity extends Activity {
         splash.addView(loading, params(0, 14, 0, 0));
 
         setContentView(splash);
-        logoWrap.setScaleX(0.88f);
-        logoWrap.setScaleY(0.88f);
-        logoWrap.setAlpha(0f);
-        logoWrap.animate().scaleX(1f).scaleY(1f).alpha(1f).setDuration(420).start();
+        mascot.setScaleX(0.82f);
+        mascot.setScaleY(0.82f);
+        mascot.setAlpha(0f);
+        mascot.animate().scaleX(1f).scaleY(1f).alpha(1f).setDuration(520).start();
         brand.setAlpha(0f);
         brand.animate().alpha(1f).setDuration(500).setStartDelay(180).start();
     }
@@ -160,7 +157,7 @@ public class MainActivity extends Activity {
         LinearLayout root = new LinearLayout(this);
         root.setOrientation(LinearLayout.VERTICAL);
         root.setPadding(dp(16), dp(12), dp(16), dp(8));
-        root.setBackgroundColor(BG);
+        root.setBackgroundResource(R.drawable.app_background);
 
         // Android 15+ may draw content edge-to-edge. Add system-bar insets to a fixed
         // base padding rather than letting the first heading sit behind the status bar.
@@ -175,30 +172,33 @@ public class MainActivity extends Activity {
 
         LinearLayout header = horizontal();
         header.setGravity(Gravity.CENTER_VERTICAL);
-        header.setPadding(dp(14), dp(13), dp(14), dp(13));
+        header.setPadding(dp(5), dp(8), dp(12), dp(8));
+        header.setMinimumHeight(dp(176));
         header.setBackground(new GradientDrawable(GradientDrawable.Orientation.LEFT_RIGHT,
-                new int[]{Color.rgb(36, 25, 93), Color.rgb(108, 52, 154)}));
-        header.setElevation(dp(3));
+                new int[]{Color.rgb(36, 20, 92), Color.rgb(105, 39, 142)}));
+        header.setElevation(dp(4));
 
+        // The mascot itself fills the left half without an icon tile or border.
         ImageView icon = new ImageView(this);
         icon.setImageResource(R.drawable.mascot);
-        icon.setScaleType(ImageView.ScaleType.CENTER_CROP);
-        icon.setBackground(background(WHITE, 18, Color.TRANSPARENT, 0));
-        icon.setClipToOutline(true);
-        header.addView(icon, new LinearLayout.LayoutParams(dp(66), dp(66)));
+        icon.setScaleType(ImageView.ScaleType.FIT_CENTER);
+        icon.setAdjustViewBounds(true);
+        icon.setBackgroundColor(Color.TRANSPARENT);
+        header.addView(icon, new LinearLayout.LayoutParams(0, dp(174), 0.92f));
 
         LinearLayout headerText = new LinearLayout(this);
         headerText.setOrientation(LinearLayout.VERTICAL);
-        headerText.setPadding(dp(12), 0, 0, 0);
-        TextView title = text("Pixel System", 22, WHITE, true);
-        TextView title2 = text("App Manager", 22, WHITE, true);
-        TextView subtitle = text("프로필별 시스템 앱 관리", 12, Color.rgb(215, 222, 245), false);
+        headerText.setGravity(Gravity.CENTER_VERTICAL);
+        headerText.setPadding(dp(7), 0, 0, 0);
+        TextView title = text("Pixel System", 21, WHITE, true);
+        TextView title2 = text("App Manager", 21, WHITE, true);
+        TextView subtitle = text("프로필별 시스템 앱 관리", 11, Color.rgb(239, 218, 255), false);
         subtitle.setPadding(0, dp(5), 0, 0);
         headerText.addView(title);
         headerText.addView(title2);
         headerText.addView(subtitle);
         header.addView(headerText, new LinearLayout.LayoutParams(0,
-                LinearLayout.LayoutParams.WRAP_CONTENT, 1f));
+                LinearLayout.LayoutParams.MATCH_PARENT, 1.08f));
         root.addView(header, params(0, 0, 0, 12));
 
         LinearLayout statusCard = horizontal();
