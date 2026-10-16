@@ -162,7 +162,7 @@ public class MainActivity extends Activity {
         // base padding rather than letting the first heading sit behind the status bar.
         if (Build.VERSION.SDK_INT >= 30) {
             root.setOnApplyWindowInsetsListener((view, insets) -> {
-                android.graphics.Insets bars = insets.getInsets(WindowInsets.Type.systemBars());
+                android.graphics.Insets bars = insets.getInsets(WindowInsets.Type.systemBars() | WindowInsets.Type.displayCutout());
                 view.setPadding(dp(16) + bars.left, dp(12) + bars.top,
                         dp(16) + bars.right, dp(8) + bars.bottom);
                 return insets;
