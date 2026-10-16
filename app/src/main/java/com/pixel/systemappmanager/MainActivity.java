@@ -45,11 +45,11 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class MainActivity extends Activity {
-    private static final int BG = Color.rgb(245, 247, 252);
-    private static final int NAVY = Color.rgb(31, 43, 78);
-    private static final int INK = Color.rgb(37, 48, 73);
-    private static final int MUTED = Color.rgb(102, 114, 139);
-    private static final int MINT = Color.rgb(54, 145, 119);
+    private static final int BG = Color.rgb(247, 244, 255);
+    private static final int NAVY = Color.rgb(35, 22, 89);
+    private static final int INK = Color.rgb(44, 34, 78);
+    private static final int MUTED = Color.rgb(108, 102, 142);
+    private static final int MINT = Color.rgb(45, 155, 147);
     private static final int RED = Color.rgb(190, 67, 73);
     private static final int LAVENDER = Color.rgb(112, 106, 190);
     private static final int WHITE = Color.WHITE;
@@ -95,6 +95,7 @@ public class MainActivity extends Activity {
     private void configureSystemBars() {
         Window window = getWindow();
         window.setStatusBarColor(BG);
+        if (Build.VERSION.SDK_INT >= 30) window.setDecorFitsSystemWindows(false);
         window.setNavigationBarColor(BG);
         window.setSoftInputMode(android.view.WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
         window.getDecorView().setSystemUiVisibility(
@@ -108,28 +109,29 @@ public class MainActivity extends Activity {
         splash.setPadding(dp(26), dp(24), dp(26), dp(24));
         splash.setBackground(new GradientDrawable(
                 GradientDrawable.Orientation.TL_BR,
-                new int[]{Color.rgb(235, 239, 255), Color.rgb(248, 250, 255), Color.rgb(230, 248, 240)}));
+                new int[]{Color.rgb(23, 18, 76), Color.rgb(55, 35, 125), Color.rgb(122, 48, 139)}));
 
         ImageView mascot = new ImageView(this);
-        mascot.setImageResource(R.drawable.ic_mascot);
+        mascot.setImageResource(R.drawable.mascot);
         mascot.setScaleType(ImageView.ScaleType.FIT_CENTER);
         LinearLayout logoWrap = new LinearLayout(this);
         logoWrap.setGravity(Gravity.CENTER);
-        logoWrap.setBackground(background(WHITE, 34, Color.rgb(225, 230, 244), dp(1)));
+        logoWrap.setBackground(background(Color.rgb(30, 22, 86), 34, Color.rgb(226, 173, 255), dp(1)));
+        logoWrap.setClipToOutline(true);
         logoWrap.setElevation(dp(10));
         logoWrap.addView(mascot, new LinearLayout.LayoutParams(dp(174), dp(174)));
         splash.addView(logoWrap, new LinearLayout.LayoutParams(dp(200), dp(200)));
 
-        TextView brand = text("Pixel System", 30, NAVY, true);
+        TextView brand = text("Pixel System", 30, WHITE, true);
         brand.setGravity(Gravity.CENTER);
         LinearLayout.LayoutParams brandLp = params(0, 24, 0, 0);
         splash.addView(brand, brandLp);
-        TextView brand2 = text("APP MANAGER", 15, LAVENDER, true);
+        TextView brand2 = text("APP MANAGER", 15, Color.rgb(255, 174, 232), true);
         brand2.setGravity(Gravity.CENTER);
         LinearLayout.LayoutParams brand2Lp = params(0, 0, 0, 8);
         splash.addView(brand2, brand2Lp);
 
-        TextView slogan = text("프로필별 시스템 앱 관리 도우미", 14, MUTED, false);
+        TextView slogan = text("프로필별 시스템 앱 관리 도우미", 14, Color.rgb(231, 220, 255), false);
         slogan.setGravity(Gravity.CENTER);
         splash.addView(slogan, params(0, 0, 0, 26));
 
@@ -137,7 +139,7 @@ public class MainActivity extends Activity {
         progress.setIndeterminate(true);
         if (Build.VERSION.SDK_INT >= 21) progress.setIndeterminateTintList(ColorStateList.valueOf(MINT));
         splash.addView(progress, new LinearLayout.LayoutParams(dp(34), dp(34)));
-        TextView loading = text("안전하게 시작하는 중…", 12, MUTED, false);
+        TextView loading = text("안전하게 시작하는 중…", 12, Color.rgb(218, 206, 245), false);
         loading.setGravity(Gravity.CENTER);
         splash.addView(loading, params(0, 14, 0, 0));
 
@@ -171,11 +173,11 @@ public class MainActivity extends Activity {
         header.setGravity(Gravity.CENTER_VERTICAL);
         header.setPadding(dp(14), dp(13), dp(14), dp(13));
         header.setBackground(new GradientDrawable(GradientDrawable.Orientation.LEFT_RIGHT,
-                new int[]{NAVY, Color.rgb(52, 67, 112)}));
+                new int[]{Color.rgb(36, 25, 93), Color.rgb(108, 52, 154)}));
         header.setElevation(dp(3));
 
         ImageView icon = new ImageView(this);
-        icon.setImageResource(R.drawable.ic_mascot);
+        icon.setImageResource(R.drawable.mascot);
         icon.setScaleType(ImageView.ScaleType.CENTER_CROP);
         icon.setBackground(background(WHITE, 18, Color.TRANSPARENT, 0));
         icon.setClipToOutline(true);
@@ -206,7 +208,7 @@ public class MainActivity extends Activity {
                 LinearLayout.LayoutParams.WRAP_CONTENT, 1f));
         TextView rootTag = text("ROOT", 10, LAVENDER, true);
         rootTag.setPadding(dp(9), dp(5), dp(9), dp(5));
-        rootTag.setBackground(background(Color.rgb(240, 238, 255), 12, Color.TRANSPARENT, 0));
+        rootTag.setBackground(background(Color.rgb(245, 232, 255), 12, Color.TRANSPARENT, 0));
         statusCard.addView(rootTag);
         root.addView(statusCard, params(0, 0, 0, 12));
 
