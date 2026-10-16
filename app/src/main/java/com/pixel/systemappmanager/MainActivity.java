@@ -3,8 +3,16 @@ package com.pixel.systemappmanager;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.res.ColorStateList;
+import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.ColorFilter;
+import android.graphics.LinearGradient;
+import android.graphics.Paint;
+import android.graphics.PixelFormat;
+import android.graphics.RadialGradient;
+import android.graphics.Shader;
 import android.graphics.Typeface;
+import android.graphics.drawable.Drawable;
 import android.graphics.drawable.GradientDrawable;
 import android.os.Build;
 import android.os.Bundle;
@@ -99,7 +107,8 @@ public class MainActivity extends Activity {
         window.setStatusBarColor(Color.TRANSPARENT);
         window.setNavigationBarColor(Color.TRANSPARENT);
         window.setSoftInputMode(android.view.WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
-        // Transparent bars reveal the app's full-height pearl gradient. Keep icons light.
+        // The system bars are transparent so the pearl gradient continues behind them.
+        // Clearing LIGHT_STATUS_BAR / LIGHT_NAVIGATION_BAR keeps their glyphs white.
         window.getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_VISIBLE);
     }
 
@@ -111,7 +120,7 @@ public class MainActivity extends Activity {
         splash.setOrientation(LinearLayout.VERTICAL);
         splash.setGravity(Gravity.CENTER);
         splash.setPadding(dp(20), dp(28), dp(20), dp(24));
-        splash.setBackgroundResource(R.drawable.app_background);
+        splash.setBackground(new PearlGradientDrawable());
 
         // Use the transparent mascot artwork directly—no card, tile, or square frame.
         ImageView mascot = new ImageView(this);
@@ -157,7 +166,7 @@ public class MainActivity extends Activity {
         LinearLayout root = new LinearLayout(this);
         root.setOrientation(LinearLayout.VERTICAL);
         root.setPadding(dp(16), dp(12), dp(16), dp(8));
-        root.setBackgroundResource(R.drawable.app_background);
+        root.setBackground(new PearlGradientDrawable());
 
         // Android 15+ may draw content edge-to-edge. Add system-bar insets to a fixed
         // base padding rather than letting the first heading sit behind the status bar.
@@ -184,7 +193,7 @@ public class MainActivity extends Activity {
         icon.setScaleType(ImageView.ScaleType.FIT_CENTER);
         icon.setAdjustViewBounds(true);
         icon.setBackgroundColor(Color.TRANSPARENT);
-        header.addView(icon, new LinearLayout.LayoutParams(0, dp(174), 0.92f));
+        header.addView(icon, new LinearLayout.LayoutParams(0, dp(174), 1.0f));
 
         LinearLayout headerText = new LinearLayout(this);
         headerText.setOrientation(LinearLayout.VERTICAL);
@@ -198,7 +207,7 @@ public class MainActivity extends Activity {
         headerText.addView(title2);
         headerText.addView(subtitle);
         header.addView(headerText, new LinearLayout.LayoutParams(0,
-                LinearLayout.LayoutParams.MATCH_PARENT, 1.08f));
+                LinearLayout.LayoutParams.MATCH_PARENT, 1.0f));
         root.addView(header, params(0, 0, 0, 12));
 
         LinearLayout statusCard = horizontal();
@@ -604,6 +613,88 @@ public class MainActivity extends Activity {
         super.onDestroy();
         handler.removeCallbacksAndMessages(null);
         worker.shutdownNow();
+    }
+
+    /**
+     * A vertical amethyst-to-magenta backdrop with subtle pearlescent light blooms
+     * and restrained sparkle flecks. It is drawn full-bleed behind transparent
+     * system bars and does not use any external image or network resource.
+     */
+    private static class PearlGradientDrawable extends Drawable {
+        private final Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
+        private final int[] colors = new int[]{
+                Color.rgb(31, 15, 76),
+                Color.rgb(91, 31, 125),
+                Color.rgb(190, 43, 143),
+                Color.rgb(224, 73, 171)
+        };
+        private final float[] stops = new float[]{0f, 0.43f, 0.78f, 1f};
+
+        @Override protected void onBoundsChange(android.graphics.Rect bounds) {
+            super.onBoundsChange(bounds);
+            paint.setShader(new LinearGradient(
+                    bounds.left, bounds.top, bounds.left, bounds.bottom,
+                    colors, stops, Shader.TileMode.CLAMP));
+        }
+
+        @Override public void draw(Canvas canvas) {
+            android.graphics.Rect bounds = getBounds();
+            float width = bounds.width();
+            float height = bounds.height();
+            if (width <= 0 || height <= 0) return;
+
+            paint.setShader(new LinearGradient(
+                    bounds.left, bounds.top, bounds.left, bounds.bottom,
+                    colors, stops, Shader.TileMode.CLAMP));
+            paint.setStyle(Paint.Style.FILL);
+            canvas.drawRect(bounds, paint);
+
+            // Soft pearl reflections; deliberately low opacity to preserve readability.
+            drawBloom(canvas, bounds.left + width * 0.12f, bounds.top + height * 0.20f,
+                    width * 0.62f, 0x28EEDCFF, 0x0BF3C9FF);
+            drawBloom(canvas, bounds.left + width * 0.91f, bounds.top + height * 0.47f,
+                    width * 0.56f, 0x23FFC6F0, 0x08FFFFFF);
+            drawBloom(canvas, bounds.left + width * 0.43f, bounds.top + height * 0.88f,
+                    width * 0.70f, 0x20FFF0FF, 0x00FFFFFF);
+
+            paint.setShader(null);
+            float[][] flecks = new float[][]{
+                    {0.08f,0.12f},{0.24f,0.20f},{0.80f,0.14f},{0.92f,0.27f},
+                    {0.13f,0.39f},{0.73f,0.44f},{0.89f,0.62f},{0.18f,0.72f},
+                    {0.49f,0.81f},{0.78f,0.90f},{0.31f,0.94f},{0.95f,0.83f}
+            };
+            for (int i = 0; i < flecks.length; i++) {
+                float x = bounds.left + width * flecks[i][0];
+                float y = bounds.top + height * flecks[i][1];
+                float radius = Math.max(1.1f, width * (i % 3 == 0 ? 0.0033f : 0.0019f));
+                paint.setColor(i % 3 == 0 ? 0x78FFF2FF : 0x38FFF8FF);
+                canvas.drawCircle(x, y, radius, paint);
+                if (i % 3 == 0) {
+                    paint.setColor(0x40FFFFFF);
+                    canvas.drawLine(x - radius * 2.6f, y, x + radius * 2.6f, y, paint);
+                    canvas.drawLine(x, y - radius * 2.6f, x, y + radius * 2.6f, paint);
+                }
+            }
+            paint.setColor(Color.WHITE);
+            paint.setShader(null);
+        }
+
+        private void drawBloom(Canvas canvas, float cx, float cy, float radius,
+                               int centerColor, int midColor) {
+            paint.setShader(new RadialGradient(
+                    cx, cy, radius,
+                    new int[]{centerColor, midColor, 0x00FFFFFF},
+                    new float[]{0f, 0.48f, 1f},
+                    Shader.TileMode.CLAMP));
+            canvas.drawRect(getBounds(), paint);
+        }
+
+        @Override public void setAlpha(int alpha) { paint.setAlpha(alpha); invalidateSelf(); }
+        @Override public void setColorFilter(ColorFilter colorFilter) {
+            paint.setColorFilter(colorFilter);
+            invalidateSelf();
+        }
+        @Override public int getOpacity() { return PixelFormat.OPAQUE; }
     }
 
     private static class Profile {
