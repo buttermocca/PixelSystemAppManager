@@ -86,6 +86,7 @@ public class MainActivity extends Activity {
         showSplash();
         handler.postDelayed(() -> {
             if (!isFinishing()) {
+                configureSystemBars();
                 buildUi();
                 checkRoot();
             }
@@ -103,6 +104,9 @@ public class MainActivity extends Activity {
     }
 
     private void showSplash() {
+        getWindow().setStatusBarColor(NAVY);
+        getWindow().setNavigationBarColor(NAVY);
+        getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_VISIBLE);
         LinearLayout splash = new LinearLayout(this);
         splash.setOrientation(LinearLayout.VERTICAL);
         splash.setGravity(Gravity.CENTER);
