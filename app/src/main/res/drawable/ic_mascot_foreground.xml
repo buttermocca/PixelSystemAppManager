@@ -4,14 +4,8 @@
     android:height="128dp"
     android:viewportWidth="128"
     android:viewportHeight="128">
-    version="1.0" encoding="utf-8"?>
-<vector xmlns:android="http://schemas.android.com/apk/res/android"
-    android:width="128dp"
-    android:height="128dp"
-    android:viewportWidth="128"
-    android:viewportHeight="128">
-    <path android:fillColor="#FFF6FF" android:pathData="M17,0 L111,0 Q128,0 128,17 L128,111 Q128,128 111,128 L17,128 Q0,128 0,111 L0,17 Q0,0 17,0 Z"/>
-    <path android:fillColor="#DAD5FF" android:pathData="M7,25 C20,12 38,8 64,8 C91,8 111,20 121,39 L121,91 C107,113 85,120 63,120 C37,120 17,109 7,91 Z"/>
+    
+    
     <path android:fillColor="#25205E" android:pathData="M39,19 L28,3 Q25,0 22,3 Q19,5 21,9 L32,28 Z M89,19 L100,3 Q103,0 106,3 Q109,5 107,9 L96,28 Z"/>
     <path android:fillColor="#B4A4FF" android:pathData="M37,18 L27,5 Q26,4 25,6 L35,24 Z M91,18 L101,5 Q102,4 103,6 L93,24 Z"/>
     <path android:fillColor="#282061" android:pathData="M17,50 C17,26 36,16 64,16 C92,16 111,27 111,50 L111,65 C111,86 93,97 64,97 C35,97 17,86 17,65 Z"/>
