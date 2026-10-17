@@ -124,11 +124,11 @@ public class MainActivity extends Activity {
 
         // Use the transparent mascot artwork directly—no card, tile, or square frame.
         ImageView mascot = new ImageView(this);
-        mascot.setImageResource(R.drawable.mascot);
+        mascot.setImageResource(R.drawable.mascot_splash);
         mascot.setScaleType(ImageView.ScaleType.FIT_CENTER);
         mascot.setAdjustViewBounds(true);
         mascot.setBackgroundColor(Color.TRANSPARENT);
-        LinearLayout.LayoutParams mascotLp = new LinearLayout.LayoutParams(dp(300), dp(370));
+        LinearLayout.LayoutParams mascotLp = new LinearLayout.LayoutParams(dp(300), dp(320));
         mascotLp.gravity = Gravity.CENTER;
         splash.addView(mascot, mascotLp);
 
@@ -183,17 +183,20 @@ public class MainActivity extends Activity {
         header.setGravity(Gravity.CENTER_VERTICAL);
         header.setPadding(dp(5), dp(8), dp(12), dp(8));
         header.setMinimumHeight(dp(176));
-        header.setBackground(new GradientDrawable(GradientDrawable.Orientation.LEFT_RIGHT,
-                new int[]{Color.rgb(36, 20, 92), Color.rgb(105, 39, 142)}));
+        GradientDrawable headerBackground = new GradientDrawable(GradientDrawable.Orientation.LEFT_RIGHT,
+                new int[]{Color.rgb(36, 20, 92), Color.rgb(105, 39, 142)});
+        headerBackground.setCornerRadius(dp(26));
+        header.setBackground(headerBackground);
+        if (Build.VERSION.SDK_INT >= 21) header.setClipToOutline(true);
         header.setElevation(dp(4));
 
         // The mascot itself fills the left half without an icon tile or border.
         ImageView icon = new ImageView(this);
-        icon.setImageResource(R.drawable.mascot);
+        icon.setImageResource(R.drawable.mascot_header);
         icon.setScaleType(ImageView.ScaleType.FIT_CENTER);
         icon.setAdjustViewBounds(true);
         icon.setBackgroundColor(Color.TRANSPARENT);
-        header.addView(icon, new LinearLayout.LayoutParams(0, dp(174), 1.0f));
+        header.addView(icon, new LinearLayout.LayoutParams(0, dp(158), 1.0f));
 
         LinearLayout headerText = new LinearLayout(this);
         headerText.setOrientation(LinearLayout.VERTICAL);
@@ -651,29 +654,68 @@ public class MainActivity extends Activity {
 
             // Soft pearl reflections; deliberately low opacity to preserve readability.
             drawBloom(canvas, bounds.left + width * 0.12f, bounds.top + height * 0.20f,
-                    width * 0.62f, 0x28EEDCFF, 0x0BF3C9FF);
+                    width * 0.62f, 0x42EEDCFF, 0x17F3C9FF);
             drawBloom(canvas, bounds.left + width * 0.91f, bounds.top + height * 0.47f,
-                    width * 0.56f, 0x23FFC6F0, 0x08FFFFFF);
+                    width * 0.56f, 0x3AFFC6F0, 0x12FFFFFF);
             drawBloom(canvas, bounds.left + width * 0.43f, bounds.top + height * 0.88f,
-                    width * 0.70f, 0x20FFF0FF, 0x00FFFFFF);
+                    width * 0.70f, 0x31FFF0FF, 0x00FFFFFF);
+            drawBloom(canvas, bounds.left + width * 0.52f, bounds.top + height * 0.55f,
+                    width * 0.24f, 0x25FFF9FF, 0x07FFFFFF);
 
             paint.setShader(null);
-            float[][] flecks = new float[][]{
-                    {0.08f,0.12f},{0.24f,0.20f},{0.80f,0.14f},{0.92f,0.27f},
-                    {0.13f,0.39f},{0.73f,0.44f},{0.89f,0.62f},{0.18f,0.72f},
-                    {0.49f,0.81f},{0.78f,0.90f},{0.31f,0.94f},{0.95f,0.83f}
-            };
-            for (int i = 0; i < flecks.length; i++) {
-                float x = bounds.left + width * flecks[i][0];
-                float y = bounds.top + height * flecks[i][1];
-                float radius = Math.max(1.1f, width * (i % 3 == 0 ? 0.0033f : 0.0019f));
-                paint.setColor(i % 3 == 0 ? 0x78FFF2FF : 0x38FFF8FF);
-                canvas.drawCircle(x, y, radius, paint);
-                if (i % 3 == 0) {
-                    paint.setColor(0x40FFFFFF);
-                    canvas.drawLine(x - radius * 2.6f, y, x + radius * 2.6f, y, paint);
-                    canvas.drawLine(x, y - radius * 2.6f, x, y + radius * 2.6f, paint);
+            // Fine-grain pearlescent glitter, spread deterministically so it stays stable during redraws.
+            paint.setStyle(Paint.Style.FILL);
+            for (int i = 0; i < 112; i++) {
+                float fx = (((i * 37) % 97) + 1) / 99f;
+                float fy = (((i * 53) % 89) + 2) / 93f;
+                float x = bounds.left + width * fx;
+                float y = bounds.top + height * fy;
+                float radius = Math.max(0.7f, Math.min(width, height) *
+                        (i % 13 == 0 ? 0.0032f : (i % 4 == 0 ? 0.00175f : 0.00105f)));
+                int shade;
+                switch (i % 5) {
+                    case 0: shade = 0xC8FFF5FF; break;
+                    case 1: shade = 0x88FFE5F8; break;
+                    case 2: shade = 0x78E8E2FF; break;
+                    case 3: shade = 0x6DFFFFFF; break;
+                    default: shade = 0x7DFFD4F0; break;
                 }
+                paint.setColor(shade);
+                canvas.drawCircle(x, y, radius, paint);
+                if (i % 13 == 0) {
+                    paint.setColor(0x70FFFFFF);
+                    paint.setStrokeWidth(Math.max(0.7f, radius * 0.45f));
+                    paint.setStyle(Paint.Style.STROKE);
+                    canvas.drawLine(x - radius * 3.4f, y, x + radius * 3.4f, y, paint);
+                    canvas.drawLine(x, y - radius * 3.4f, x, y + radius * 3.4f, paint);
+                    paint.setStyle(Paint.Style.FILL);
+                }
+            }
+
+            // Larger four-point glints provide the polished pearl / mica sparkle.
+            float[][] sparkles = new float[][]{
+                    {0.12f,0.19f,0.014f},{0.29f,0.35f,0.009f},{0.77f,0.17f,0.012f},
+                    {0.90f,0.38f,0.010f},{0.17f,0.62f,0.011f},{0.65f,0.72f,0.014f},
+                    {0.39f,0.88f,0.010f},{0.87f,0.87f,0.012f},{0.53f,0.48f,0.008f}
+            };
+            for (float[] sparkle : sparkles) {
+                float x = bounds.left + width * sparkle[0];
+                float y = bounds.top + height * sparkle[1];
+                float size = Math.min(width, height) * sparkle[2];
+                paint.setColor(0xB8FFF8FF);
+                paint.setStyle(Paint.Style.STROKE);
+                paint.setStrokeCap(Paint.Cap.ROUND);
+                paint.setStrokeWidth(Math.max(1f, size * 0.16f));
+                canvas.drawLine(x - size, y, x + size, y, paint);
+                canvas.drawLine(x, y - size * 1.35f, x, y + size * 1.35f, paint);
+                paint.setColor(0x55FFFFFF);
+                canvas.drawLine(x - size * 0.62f, y - size * 0.62f,
+                        x + size * 0.62f, y + size * 0.62f, paint);
+                canvas.drawLine(x - size * 0.62f, y + size * 0.62f,
+                        x + size * 0.62f, y - size * 0.62f, paint);
+                paint.setStyle(Paint.Style.FILL);
+                paint.setColor(0xE8FFFFFF);
+                canvas.drawCircle(x, y, Math.max(0.8f, size * 0.13f), paint);
             }
             paint.setColor(Color.WHITE);
             paint.setShader(null);
