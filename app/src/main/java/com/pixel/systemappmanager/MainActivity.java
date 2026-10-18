@@ -198,6 +198,9 @@ public class MainActivity extends Activity {
         icon.setScaleType(ImageView.ScaleType.FIT_CENTER);
         icon.setAdjustViewBounds(true);
         icon.setBackgroundColor(Color.TRANSPARENT);
+        icon.setScaleX(-1f);
+        icon.setCameraDistance(dp(900));
+        icon.setRotationY(-9f);
         header.addView(icon, new LinearLayout.LayoutParams(0, dp(174), 1.0f));
 
         LinearLayout headerText = new LinearLayout(this);
