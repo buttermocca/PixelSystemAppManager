@@ -2,7 +2,7 @@
 <resources>
     <style name="AppTheme" parent="@android:style/Theme.Material.Light.NoActionBar">
         <item name="android:fontFamily">sans</item>
-        <item name="android:colorAccent">#B445C2</item>
+        <item name="android:colorAccent">#D548BC</item>
         <item name="android:statusBarColor">@android:color/transparent</item>
         <item name="android:navigationBarColor">@android:color/transparent</item>
         <item name="android:windowLightStatusBar">false</item>
@@ -10,7 +10,7 @@
         <item name="android:windowActionModeOverlay">true</item>
         <item name="android:windowNoTitle">true</item>
         <item name="android:windowBackground">@drawable/splash_background</item>
-        <item name="android:windowSplashScreenBackground">#1F0F4C</item>
-        <item name="android:windowSplashScreenAnimatedIcon">@drawable/mascot</item>
+        <item name="android:windowSplashScreenBackground">#1B0A46</item>
+        <item name="android:windowSplashScreenAnimatedIcon">@drawable/mascot_splash</item>
     </style>
 </resources>
