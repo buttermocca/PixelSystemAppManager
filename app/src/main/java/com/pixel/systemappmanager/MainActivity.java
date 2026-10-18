@@ -124,11 +124,11 @@ public class MainActivity extends Activity {
 
         // Use the transparent mascot artwork directly—no card, tile, or square frame.
         ImageView mascot = new ImageView(this);
-        mascot.setImageResource(R.drawable.mascot);
+        mascot.setImageResource(R.drawable.mascot_splash);
         mascot.setScaleType(ImageView.ScaleType.FIT_CENTER);
         mascot.setAdjustViewBounds(true);
         mascot.setBackgroundColor(Color.TRANSPARENT);
-        LinearLayout.LayoutParams mascotLp = new LinearLayout.LayoutParams(dp(300), dp(370));
+        LinearLayout.LayoutParams mascotLp = new LinearLayout.LayoutParams(dp(310), dp(360));
         mascotLp.gravity = Gravity.CENTER;
         splash.addView(mascot, mascotLp);
 
@@ -154,10 +154,11 @@ public class MainActivity extends Activity {
         splash.addView(loading, params(0, 14, 0, 0));
 
         setContentView(splash);
-        mascot.setScaleX(0.82f);
-        mascot.setScaleY(0.82f);
+        mascot.setRotation(-7f);
+        mascot.setScaleX(0.78f);
+        mascot.setScaleY(0.78f);
         mascot.setAlpha(0f);
-        mascot.animate().scaleX(1f).scaleY(1f).alpha(1f).setDuration(520).start();
+        mascot.animate().rotation(0f).scaleX(1f).scaleY(1f).alpha(1f).setDuration(620).start();
         brand.setAlpha(0f);
         brand.animate().alpha(1f).setDuration(500).setStartDelay(180).start();
     }
@@ -183,13 +184,17 @@ public class MainActivity extends Activity {
         header.setGravity(Gravity.CENTER_VERTICAL);
         header.setPadding(dp(5), dp(8), dp(12), dp(8));
         header.setMinimumHeight(dp(176));
-        header.setBackground(new GradientDrawable(GradientDrawable.Orientation.LEFT_RIGHT,
-                new int[]{Color.rgb(36, 20, 92), Color.rgb(105, 39, 142)}));
+        GradientDrawable headerGradient = new GradientDrawable(
+                GradientDrawable.Orientation.LEFT_RIGHT,
+                new int[]{Color.rgb(36, 20, 92), Color.rgb(105, 39, 142)});
+        headerGradient.setCornerRadius(dp(24));
+        header.setBackground(headerGradient);
+        header.setClipToOutline(true);
         header.setElevation(dp(4));
 
         // The mascot itself fills the left half without an icon tile or border.
         ImageView icon = new ImageView(this);
-        icon.setImageResource(R.drawable.mascot);
+        icon.setImageResource(R.drawable.mascot_header);
         icon.setScaleType(ImageView.ScaleType.FIT_CENTER);
         icon.setAdjustViewBounds(true);
         icon.setBackgroundColor(Color.TRANSPARENT);
@@ -623,12 +628,12 @@ public class MainActivity extends Activity {
     private static class PearlGradientDrawable extends Drawable {
         private final Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
         private final int[] colors = new int[]{
-                Color.rgb(31, 15, 76),
-                Color.rgb(91, 31, 125),
-                Color.rgb(190, 43, 143),
-                Color.rgb(224, 73, 171)
+                Color.rgb(27, 10, 70),
+                Color.rgb(76, 22, 116),
+                Color.rgb(156, 31, 133),
+                Color.rgb(224, 56, 174)
         };
-        private final float[] stops = new float[]{0f, 0.43f, 0.78f, 1f};
+        private final float[] stops = new float[]{0f, 0.38f, 0.73f, 1f};
 
         @Override protected void onBoundsChange(android.graphics.Rect bounds) {
             super.onBoundsChange(bounds);
@@ -651,28 +656,36 @@ public class MainActivity extends Activity {
 
             // Soft pearl reflections; deliberately low opacity to preserve readability.
             drawBloom(canvas, bounds.left + width * 0.12f, bounds.top + height * 0.20f,
-                    width * 0.62f, 0x28EEDCFF, 0x0BF3C9FF);
-            drawBloom(canvas, bounds.left + width * 0.91f, bounds.top + height * 0.47f,
-                    width * 0.56f, 0x23FFC6F0, 0x08FFFFFF);
+                    width * 0.68f, 0x48F1DDFF, 0x1AF3C9FF);
+            drawBloom(canvas, bounds.left + width * 0.92f, bounds.top + height * 0.47f,
+                    width * 0.62f, 0x42FFC6F0, 0x12FFFFFF);
             drawBloom(canvas, bounds.left + width * 0.43f, bounds.top + height * 0.88f,
-                    width * 0.70f, 0x20FFF0FF, 0x00FFFFFF);
+                    width * 0.76f, 0x3BFFF0FF, 0x08FFFFFF);
+            drawBloom(canvas, bounds.left + width * 0.56f, bounds.top + height * 0.59f,
+                    width * 0.40f, 0x22C7B5FF, 0x05FFFFFF);
 
             paint.setShader(null);
             float[][] flecks = new float[][]{
-                    {0.08f,0.12f},{0.24f,0.20f},{0.80f,0.14f},{0.92f,0.27f},
-                    {0.13f,0.39f},{0.73f,0.44f},{0.89f,0.62f},{0.18f,0.72f},
-                    {0.49f,0.81f},{0.78f,0.90f},{0.31f,0.94f},{0.95f,0.83f}
+                    {0.05f,0.08f},{0.14f,0.16f},{0.26f,0.09f},{0.39f,0.18f},
+                    {0.54f,0.08f},{0.69f,0.13f},{0.83f,0.07f},{0.95f,0.18f},
+                    {0.09f,0.29f},{0.31f,0.33f},{0.50f,0.27f},{0.74f,0.31f},
+                    {0.91f,0.39f},{0.18f,0.46f},{0.42f,0.48f},{0.64f,0.43f},
+                    {0.84f,0.53f},{0.07f,0.63f},{0.27f,0.68f},{0.49f,0.60f},
+                    {0.70f,0.69f},{0.94f,0.65f},{0.15f,0.81f},{0.36f,0.87f},
+                    {0.58f,0.80f},{0.80f,0.87f},{0.95f,0.94f},{0.06f,0.96f}
             };
             for (int i = 0; i < flecks.length; i++) {
                 float x = bounds.left + width * flecks[i][0];
                 float y = bounds.top + height * flecks[i][1];
-                float radius = Math.max(1.1f, width * (i % 3 == 0 ? 0.0033f : 0.0019f));
-                paint.setColor(i % 3 == 0 ? 0x78FFF2FF : 0x38FFF8FF);
+                float radius = Math.max(1.2f, width * (i % 4 == 0 ? 0.0048f : 0.0026f));
+                paint.setColor(i % 4 == 0 ? 0xB0FFF0FF : 0x68FFF8FF);
                 canvas.drawCircle(x, y, radius, paint);
-                if (i % 3 == 0) {
-                    paint.setColor(0x40FFFFFF);
-                    canvas.drawLine(x - radius * 2.6f, y, x + radius * 2.6f, y, paint);
-                    canvas.drawLine(x, y - radius * 2.6f, x, y + radius * 2.6f, paint);
+                if (i % 4 == 0) {
+                    paint.setColor(0x92FFFFFF);
+                    canvas.drawLine(x - radius * 3.3f, y, x + radius * 3.3f, y, paint);
+                    canvas.drawLine(x, y - radius * 3.3f, x, y + radius * 3.3f, paint);
+                    paint.setColor(0x40FBC7FF);
+                    canvas.drawCircle(x, y, radius * 2.2f, paint);
                 }
             }
             paint.setColor(Color.WHITE);
