@@ -53,13 +53,13 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class MainActivity extends Activity {
-    private static final int BG = Color.rgb(247, 244, 255);
-    private static final int NAVY = Color.rgb(35, 22, 89);
-    private static final int INK = Color.rgb(44, 34, 78);
-    private static final int MUTED = Color.rgb(108, 102, 142);
-    private static final int MINT = Color.rgb(45, 155, 147);
-    private static final int RED = Color.rgb(190, 67, 73);
-    private static final int LAVENDER = Color.rgb(112, 106, 190);
+    private static final int BG = Color.rgb(27, 10, 70);
+    private static final int NAVY = Color.rgb(35, 12, 82);
+    private static final int INK = Color.rgb(255, 246, 255);
+    private static final int MUTED = Color.rgb(224, 205, 250);
+    private static final int MINT = Color.rgb(76, 255, 220);
+    private static final int RED = Color.rgb(255, 66, 105);
+    private static final int LAVENDER = Color.rgb(244, 171, 255);
     private static final int WHITE = Color.WHITE;
 
     private final ExecutorService worker = Executors.newSingleThreadExecutor();
@@ -186,8 +186,9 @@ public class MainActivity extends Activity {
         header.setMinimumHeight(dp(176));
         GradientDrawable headerGradient = new GradientDrawable(
                 GradientDrawable.Orientation.LEFT_RIGHT,
-                new int[]{Color.rgb(36, 20, 92), Color.rgb(105, 39, 142)});
+                new int[]{Color.rgb(24, 10, 70), Color.rgb(90, 22, 135), Color.rgb(174, 39, 171)});
         headerGradient.setCornerRadius(dp(24));
+        headerGradient.setStroke(dp(1), 0xBFFFFFFF);
         header.setBackground(headerGradient);
         header.setClipToOutline(true);
         header.setElevation(dp(4));
@@ -221,7 +222,8 @@ public class MainActivity extends Activity {
         LinearLayout statusCard = horizontal();
         statusCard.setGravity(Gravity.CENTER_VERTICAL);
         statusCard.setPadding(dp(12), dp(9), dp(12), dp(9));
-        statusCard.setBackground(background(WHITE, 16, Color.rgb(229, 233, 243), dp(1)));
+        statusCard.setBackground(background(0x483B167A, 16, 0xC8F8E6FF, dp(1)));
+        statusCard.setElevation(dp(4));
         TextView statusDot = text("●", 12, MINT, true);
         statusCard.addView(statusDot, new LinearLayout.LayoutParams(dp(20), dp(22)));
         rootStatus = text("루트 권한 확인 중…", 12, MUTED, true);
@@ -234,12 +236,12 @@ public class MainActivity extends Activity {
         root.addView(statusCard, params(0, 0, 0, 12));
 
         LinearLayout profileCard = card();
-        TextView profileLabel = text("사용자 프로필", 13, INK, true);
+        TextView profileLabel = text("◈  사용자 프로필", 13, WHITE, true);
         profileCard.addView(profileLabel, params(0, 0, 0, 5));
         LinearLayout profileRow = horizontal();
         profileSpinner = new Spinner(this);
         profileRow.addView(profileSpinner, new LinearLayout.LayoutParams(0, dp(48), 1f));
-        Button refresh = button("새로고침", Color.rgb(73, 91, 135), 14);
+        Button refresh = button("⟳  새로고침", Color.rgb(111, 59, 177), 14);
         LinearLayout.LayoutParams refreshLp = new LinearLayout.LayoutParams(dp(100), dp(46));
         refreshLp.leftMargin = dp(8);
         profileRow.addView(refresh, refreshLp);
@@ -253,11 +255,12 @@ public class MainActivity extends Activity {
         search = new EditText(this);
         search.setSingleLine(true);
         search.setTextSize(14);
-        search.setTextColor(INK);
-        search.setHintTextColor(Color.rgb(139, 148, 166));
+        search.setTextColor(WHITE);
+        search.setHintTextColor(Color.rgb(226, 206, 250));
         search.setHint("⌕   패키지명 검색 (예: com.google)");
         search.setPadding(dp(15), dp(5), dp(15), dp(5));
-        search.setBackground(background(WHITE, 15, Color.rgb(229, 233, 243), dp(1)));
+        search.setBackground(background(0x3BFFFFFF, 18, 0xC9F7E7FF, dp(1)));
+        search.setElevation(dp(2));
         root.addView(search, params(0, 0, 0, 8));
         search.addTextChangedListener(new TextWatcher() {
             @Override public void beforeTextChanged(CharSequence s, int start, int count, int after) { }
@@ -266,14 +269,14 @@ public class MainActivity extends Activity {
         });
 
         LinearLayout summaryCard = card();
-        TextView summaryLabel = text("패키지 현황", 12, MUTED, true);
+        TextView summaryLabel = text("▣  패키지 현황", 12, LAVENDER, true);
         summaryCard.addView(summaryLabel, params(0, 0, 0, 3));
         summary = text("앱 목록을 불러오는 중…", 12, INK, false);
         summary.setLineSpacing(dp(2), 1f);
         summaryCard.addView(summary);
         root.addView(summaryCard, params(0, 0, 0, 8));
 
-        Button selectVisible = button("표시된 항목 전체 선택 / 해제", Color.rgb(104, 115, 140), 13);
+        Button selectVisible = button("▦  표시된 항목 전체 선택 / 해제", Color.rgb(79, 57, 178), 13);
         root.addView(selectVisible, params(0, 0, 0, 8));
         selectVisible.setOnClickListener(v -> {
             boolean select = false;
@@ -297,11 +300,12 @@ public class MainActivity extends Activity {
         restore.setOnClickListener(v -> confirmOperation(false));
 
         FrameLayout listFrame = new FrameLayout(this);
-        listFrame.setBackground(background(WHITE, 18, Color.rgb(229, 233, 243), dp(1)));
+        listFrame.setBackground(background(0x45301770, 22, 0xC8F8E7FF, dp(1)));
+        listFrame.setElevation(dp(3));
         listFrame.setClipToOutline(true);
         listView = new ListView(this);
         listView.setDividerHeight(dp(1));
-        listView.setDivider(new android.graphics.drawable.ColorDrawable(Color.rgb(239, 242, 248)));
+        listView.setDivider(new android.graphics.drawable.ColorDrawable(0x46F7DFFF));
         listView.setSelector(android.R.color.transparent);
         listView.setPadding(0, dp(4), 0, dp(4));
         listView.setClipToPadding(false);
@@ -316,7 +320,7 @@ public class MainActivity extends Activity {
         });
         listFrame.addView(listView, new FrameLayout.LayoutParams(
                 FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.MATCH_PARENT));
-        emptyState = text("아직 표시할 시스템 패키지가 없어요.\n루트 권한을 허용하고 새로고침해 주세요. ♡",
+        emptyState = text("✦  아직 표시할 시스템 패키지가 없어요.  ✦\n루트 권한을 허용하고 새로고침해 주세요. ♡",
                 14, MUTED, false);
         emptyState.setGravity(Gravity.CENTER);
         emptyState.setPadding(dp(20), dp(20), dp(20), dp(20));
@@ -326,8 +330,8 @@ public class MainActivity extends Activity {
         root.addView(listFrame, new LinearLayout.LayoutParams(
                 LinearLayout.LayoutParams.MATCH_PARENT, 0, 1f));
 
-        log = text("안내  ·  앱은 선택한 프로필에서만 제거됩니다. 원본 APK 파일은 삭제하지 않습니다.",
-                10, MUTED, false);
+        log = text("✧  안내 · 선택한 프로필에서만 제거됩니다. 원본 APK 파일은 삭제하지 않습니다.",
+                10, Color.rgb(241, 221, 255), false);
         log.setGravity(Gravity.CENTER_VERTICAL);
         log.setPadding(dp(3), dp(8), dp(3), dp(2));
         root.addView(log, params(0, 0, 0, 0));
@@ -558,10 +562,22 @@ public class MainActivity extends Activity {
     private LinearLayout card() {
         LinearLayout result = new LinearLayout(this);
         result.setOrientation(LinearLayout.VERTICAL);
-        result.setPadding(dp(13), dp(11), dp(13), dp(11));
-        result.setBackground(background(WHITE, 16, Color.rgb(229, 233, 243), dp(1)));
-        result.setElevation(dp(1));
+        result.setPadding(dp(14), dp(12), dp(14), dp(12));
+        result.setBackground(background(0x49321A78, 20, 0xBFF7E7FF, dp(1)));
+        result.setElevation(dp(3));
         return result;
+    }
+
+    private int lighten(int color, float amount) {
+        int r = Color.red(color), g = Color.green(color), b = Color.blue(color);
+        return Color.rgb((int)(r + (255 - r) * amount),
+                (int)(g + (255 - g) * amount), (int)(b + (255 - b) * amount));
+    }
+
+    private int darken(int color, float amount) {
+        return Color.rgb((int)(Color.red(color) * (1f - amount)),
+                (int)(Color.green(color) * (1f - amount)),
+                (int)(Color.blue(color) * (1f - amount)));
     }
 
     private GradientDrawable background(int color, int radius, int strokeColor, int strokeWidth) {
@@ -599,9 +615,28 @@ public class MainActivity extends Activity {
         result.setAllCaps(false);
         result.setTextColor(WHITE);
         result.setGravity(Gravity.CENTER);
-        result.setBackground(background(color, 14, Color.TRANSPARENT, 0));
-        result.setElevation(dp(2));
-        result.setPadding(dp(5), 0, dp(5), 0);
+        int start;
+        int end;
+        if (color == RED) {
+            start = Color.rgb(255, 82, 119);
+            end = Color.rgb(197, 35, 96);
+        } else if (color == MINT) {
+            start = Color.rgb(25, 211, 191);
+            end = Color.rgb(28, 138, 177);
+        } else if (color == Color.rgb(79, 57, 178)) {
+            start = Color.rgb(53, 68, 190);
+            end = Color.rgb(139, 48, 190);
+        } else {
+            start = lighten(color, 0.18f);
+            end = darken(color, 0.12f);
+        }
+        GradientDrawable fill = new GradientDrawable(GradientDrawable.Orientation.LEFT_RIGHT,
+                new int[]{start, end});
+        fill.setCornerRadius(dp(16));
+        fill.setStroke(dp(1), 0x7FFFFFFF);
+        result.setBackground(fill);
+        result.setElevation(dp(4));
+        result.setPadding(dp(7), 0, dp(7), 0);
         return result;
     }
 
@@ -755,11 +790,11 @@ public class MainActivity extends Activity {
                 row.setPadding(dp(8), dp(3), dp(8), dp(3));
                 check = new CheckBox(MainActivity.this);
                 check.setTextSize(12);
-                check.setTextColor(INK);
+                check.setTextColor(WHITE);
                 check.setPadding(0, dp(6), dp(5), dp(6));
                 check.setButtonTintList(new ColorStateList(
                         new int[][]{new int[]{android.R.attr.state_checked}, new int[]{}},
-                        new int[]{MINT, Color.rgb(151, 160, 177)}));
+                        new int[]{Color.rgb(255, 135, 237), Color.rgb(234, 218, 255)}));
                 row.addView(check, new LinearLayout.LayoutParams(0,
                         LinearLayout.LayoutParams.WRAP_CONTENT, 1f));
                 state = new TextView(MainActivity.this);
@@ -779,16 +814,16 @@ public class MainActivity extends Activity {
             });
             if (protectedPackages.contains(item.name)) {
                 state.setText("핵심 보호");
-                state.setTextColor(Color.rgb(154, 74, 56));
-                state.setBackground(background(Color.rgb(255, 240, 234), 10, Color.TRANSPARENT, 0));
+                state.setTextColor(Color.rgb(255, 224, 238));
+                state.setBackground(background(0x668D305F, 10, 0x66FFC1E8, dp(1)));
             } else if (item.installed) {
                 state.setText("설치됨");
-                state.setTextColor(MINT);
-                state.setBackground(background(Color.rgb(229, 247, 240), 10, Color.TRANSPARENT, 0));
+                state.setTextColor(Color.rgb(153, 255, 236));
+                state.setBackground(background(0x5533A999, 10, 0x7A9CFFED, dp(1)));
             } else {
                 state.setText("제거됨");
-                state.setTextColor(MUTED);
-                state.setBackground(background(Color.rgb(239, 242, 248), 10, Color.TRANSPARENT, 0));
+                state.setTextColor(Color.rgb(249, 195, 255));
+                state.setBackground(background(0x5D7F3198, 10, 0x8CECB4FF, dp(1)));
             }
             return row;
         }
