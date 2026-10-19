@@ -9,6 +9,7 @@ import android.graphics.ColorFilter;
 import android.graphics.LinearGradient;
 import android.graphics.Paint;
 import android.graphics.PixelFormat;
+import android.graphics.Outline;
 import android.graphics.RadialGradient;
 import android.graphics.Shader;
 import android.graphics.Typeface;
@@ -184,12 +185,7 @@ public class MainActivity extends Activity {
         header.setGravity(Gravity.CENTER_VERTICAL);
         header.setPadding(dp(5), dp(8), dp(12), dp(8));
         header.setMinimumHeight(dp(176));
-        GradientDrawable headerGradient = new GradientDrawable(
-                GradientDrawable.Orientation.LEFT_RIGHT,
-                new int[]{Color.rgb(24, 10, 70), Color.rgb(90, 22, 135), Color.rgb(174, 39, 171)});
-        headerGradient.setCornerRadius(dp(24));
-        headerGradient.setStroke(dp(1), 0xBFFFFFFF);
-        header.setBackground(headerGradient);
+        header.setBackground(new HeaderPearlDrawable());
         header.setClipToOutline(true);
         header.setElevation(dp(4));
 
@@ -677,6 +673,56 @@ public class MainActivity extends Activity {
         super.onDestroy();
         handler.removeCallbacksAndMessages(null);
         worker.shutdownNow();
+    }
+
+    /** Dark, star-flecked violet-magenta glass used behind the hero mascot. */
+    private static class HeaderPearlDrawable extends Drawable {
+        private final Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
+        @Override public void draw(Canvas canvas) {
+            android.graphics.Rect b = getBounds();
+            float w = b.width(), h = b.height();
+            if (w <= 0 || h <= 0) return;
+            paint.setShader(new LinearGradient(b.left, b.top, b.right, b.bottom,
+                    new int[]{Color.rgb(24, 10, 70), Color.rgb(76, 19, 121), Color.rgb(163, 35, 161)},
+                    new float[]{0f, 0.55f, 1f}, Shader.TileMode.CLAMP));
+            canvas.drawRect(b, paint);
+            paint.setShader(new RadialGradient(b.left + w * 0.18f, b.top + h * 0.25f,
+                    w * 0.65f, new int[]{0x42B9A8FF, 0x12D2A8FF, 0x00FFFFFF},
+                    new float[]{0f, 0.5f, 1f}, Shader.TileMode.CLAMP));
+            canvas.drawRect(b, paint);
+            paint.setShader(new RadialGradient(b.left + w * 0.9f, b.top + h * 0.88f,
+                    w * 0.55f, new int[]{0x42FF9FE8, 0x10FFB8F1, 0x00FFFFFF},
+                    new float[]{0f, 0.45f, 1f}, Shader.TileMode.CLAMP));
+            canvas.drawRect(b, paint);
+            paint.setShader(null);
+            float[][] stars = {
+                    {0.08f,0.15f},{0.22f,0.72f},{0.36f,0.20f},{0.51f,0.12f},
+                    {0.64f,0.78f},{0.79f,0.22f},{0.91f,0.13f},{0.94f,0.75f},
+                    {0.16f,0.88f},{0.43f,0.85f},{0.72f,0.48f},{0.56f,0.46f}
+            };
+            for (int i=0; i<stars.length; i++) {
+                float x=b.left+w*stars[i][0], y=b.top+h*stars[i][1];
+                float r=Math.max(1.2f,w*(i%3==0?0.006f:0.0028f));
+                paint.setColor(i%3==0?0xD8FFF5FF:0x78EDE5FF);
+                canvas.drawCircle(x,y,r,paint);
+                if(i%3==0) {
+                    paint.setColor(0x9AFFFFFF);
+                    canvas.drawLine(x-r*3.5f,y,x+r*3.5f,y,paint);
+                    canvas.drawLine(x,y-r*3.5f,x,y+r*3.5f,paint);
+                    paint.setColor(0x55FFBFF4);
+                    canvas.drawCircle(x,y,r*2.5f,paint);
+                }
+            }
+            paint.setShader(null);
+            paint.setColor(Color.WHITE);
+        }
+        @Override public void getOutline(Outline outline) {
+            android.graphics.Rect b=getBounds();
+            outline.setRoundRect(b, Math.min(b.width(), b.height()) * 0.065f);
+        }
+        @Override public void setAlpha(int alpha) { paint.setAlpha(alpha); invalidateSelf(); }
+        @Override public void setColorFilter(ColorFilter filter) { paint.setColorFilter(filter); invalidateSelf(); }
+        @Override public int getOpacity() { return PixelFormat.OPAQUE; }
     }
 
     /**
