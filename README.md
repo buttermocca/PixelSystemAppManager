@@ -36,3 +36,10 @@ Magisk, KernelSU/KernelSU Next, APatch, or another root solution must provide `s
 - Separate mascot artwork roles: a tilted wink for the launcher icon, a waving pose in the header, and a crystal-origami pose on a crescent moon in the splash screen.
 - Purple glass-style profile, search, package summary, and list cards with high-contrast labels and luminous gradient action buttons.
 - App icons alongside package names in the system package list.
+
+
+## v1.5.1 concept-style visual refresh
+
+- Uses the high-detail crystal mascot bitmap without a square tile for the launcher icon.
+- Adds a crescent-moon mascot composition to the splash scene and a dedicated galaxy hero banner.
+- Reworks the main screen into violet glass cards with luminous magenta buttons, package icons, and pearl-like sparkle highlights.
