@@ -117,51 +117,56 @@ public class MainActivity extends Activity {
         getWindow().setStatusBarColor(Color.TRANSPARENT);
         getWindow().setNavigationBarColor(Color.TRANSPARENT);
         getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_VISIBLE);
-        LinearLayout splash = new LinearLayout(this);
-        splash.setOrientation(LinearLayout.VERTICAL);
-        splash.setGravity(Gravity.CENTER);
-        splash.setPadding(dp(20), dp(28), dp(20), dp(24));
-        splash.setBackground(new PearlGradientDrawable());
 
-        // Use the transparent mascot artwork directly—no card, tile, or square frame.
-        ImageView mascot = new ImageView(this);
-        mascot.setImageResource(R.drawable.mascot_splash);
-        mascot.setScaleType(ImageView.ScaleType.FIT_CENTER);
-        mascot.setAdjustViewBounds(true);
-        mascot.setBackgroundColor(Color.TRANSPARENT);
-        LinearLayout.LayoutParams mascotLp = new LinearLayout.LayoutParams(dp(310), dp(360));
-        mascotLp.gravity = Gravity.CENTER;
-        splash.addView(mascot, mascotLp);
+        // A real full-bleed concept illustration—not a vector icon enlarged into a splash.
+        FrameLayout splash = new FrameLayout(this);
+        ImageView scene = new ImageView(this);
+        scene.setImageResource(R.drawable.splash_scene);
+        scene.setScaleType(ImageView.ScaleType.CENTER_CROP);
+        scene.setContentDescription("크리스털 안드로이드와 별빛 바다");
+        splash.addView(scene, new FrameLayout.LayoutParams(
+                FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.MATCH_PARENT));
 
+        View bottomShade = new View(this);
+        GradientDrawable fade = new GradientDrawable(GradientDrawable.Orientation.TOP_BOTTOM,
+                new int[]{0x00150A42, 0xA8150648, 0xEF16063B});
+        bottomShade.setBackground(fade);
+        FrameLayout.LayoutParams shadeLp = new FrameLayout.LayoutParams(
+                FrameLayout.LayoutParams.MATCH_PARENT, dp(270), Gravity.BOTTOM);
+        splash.addView(bottomShade, shadeLp);
+
+        LinearLayout copy = new LinearLayout(this);
+        copy.setOrientation(LinearLayout.VERTICAL);
+        copy.setGravity(Gravity.CENTER_HORIZONTAL);
+        copy.setPadding(dp(28), dp(20), dp(28), dp(34));
         TextView brand = text("Pixel System", 30, WHITE, true);
         brand.setGravity(Gravity.CENTER);
-        LinearLayout.LayoutParams brandLp = params(0, 24, 0, 0);
-        splash.addView(brand, brandLp);
+        copy.addView(brand, params(0, 0, 0, 0));
         TextView brand2 = text("APP MANAGER", 15, Color.rgb(255, 174, 232), true);
         brand2.setGravity(Gravity.CENTER);
-        LinearLayout.LayoutParams brand2Lp = params(0, 0, 0, 8);
-        splash.addView(brand2, brand2Lp);
-
-        TextView slogan = text("프로필별 시스템 앱 관리 도우미", 14, Color.rgb(231, 220, 255), false);
+        copy.addView(brand2, params(0, 0, 0, 8));
+        TextView slogan = text("프로필별 시스템 앱 관리 도우미", 14,
+                Color.rgb(245, 223, 255), false);
         slogan.setGravity(Gravity.CENTER);
-        splash.addView(slogan, params(0, 0, 0, 26));
-
+        copy.addView(slogan, params(0, 0, 0, 18));
         ProgressBar progress = new ProgressBar(this);
         progress.setIndeterminate(true);
-        if (Build.VERSION.SDK_INT >= 21) progress.setIndeterminateTintList(ColorStateList.valueOf(MINT));
-        splash.addView(progress, new LinearLayout.LayoutParams(dp(34), dp(34)));
-        TextView loading = text("안전하게 시작하는 중…", 12, Color.rgb(218, 206, 245), false);
+        if (Build.VERSION.SDK_INT >= 21)
+            progress.setIndeterminateTintList(ColorStateList.valueOf(Color.rgb(255, 190, 250)));
+        copy.addView(progress, new LinearLayout.LayoutParams(dp(32), dp(32)));
+        TextView loading = text("시스템 앱을 더 안전하게 관리하세요", 12,
+                Color.rgb(230, 207, 255), false);
         loading.setGravity(Gravity.CENTER);
-        splash.addView(loading, params(0, 14, 0, 0));
-
+        copy.addView(loading, params(0, 10, 0, 0));
+        FrameLayout.LayoutParams copyLp = new FrameLayout.LayoutParams(
+                FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.WRAP_CONTENT,
+                Gravity.BOTTOM);
+        splash.addView(copy, copyLp);
         setContentView(splash);
-        mascot.setRotation(-7f);
-        mascot.setScaleX(0.78f);
-        mascot.setScaleY(0.78f);
-        mascot.setAlpha(0f);
-        mascot.animate().rotation(0f).scaleX(1f).scaleY(1f).alpha(1f).setDuration(620).start();
+        scene.setAlpha(0.72f);
+        scene.animate().alpha(1f).setDuration(650).start();
         brand.setAlpha(0f);
-        brand.animate().alpha(1f).setDuration(500).setStartDelay(180).start();
+        brand.animate().alpha(1f).setDuration(550).setStartDelay(160).start();
     }
 
     private void buildUi() {
@@ -181,38 +186,42 @@ public class MainActivity extends Activity {
             });
         }
 
-        LinearLayout header = horizontal();
-        header.setGravity(Gravity.CENTER_VERTICAL);
-        header.setPadding(dp(5), dp(8), dp(12), dp(8));
-        header.setMinimumHeight(dp(176));
+        FrameLayout header = new FrameLayout(this);
+        header.setMinimumHeight(dp(174));
         header.setBackground(new HeaderPearlDrawable());
         header.setClipToOutline(true);
-        header.setElevation(dp(4));
+        header.setElevation(dp(5));
 
-        // The mascot itself fills the left half without an icon tile or border.
-        ImageView icon = new ImageView(this);
-        icon.setImageResource(R.drawable.mascot_header);
-        icon.setScaleType(ImageView.ScaleType.FIT_CENTER);
-        icon.setAdjustViewBounds(true);
-        icon.setBackgroundColor(Color.TRANSPARENT);
-        icon.setScaleX(-1f);
-        icon.setCameraDistance(dp(900));
-        icon.setRotationY(-9f);
-        header.addView(icon, new LinearLayout.LayoutParams(0, dp(174), 1.0f));
+        // The concept banner has the crystal-moon mascot on the left and clean text space at right.
+        ImageView hero = new ImageView(this);
+        hero.setImageResource(R.drawable.hero_scene);
+        hero.setScaleType(ImageView.ScaleType.CENTER_CROP);
+        hero.setContentDescription("초승달 위의 크리스털 안드로이드와 은하수");
+        header.addView(hero, new FrameLayout.LayoutParams(
+                FrameLayout.LayoutParams.MATCH_PARENT, dp(184)));
+
+        View textShade = new View(this);
+        GradientDrawable rightShade = new GradientDrawable(GradientDrawable.Orientation.LEFT_RIGHT,
+                new int[]{0x000D0638, 0x54240B62, 0xCA240747});
+        textShade.setBackground(rightShade);
+        header.addView(textShade, new FrameLayout.LayoutParams(
+                FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.MATCH_PARENT));
 
         LinearLayout headerText = new LinearLayout(this);
         headerText.setOrientation(LinearLayout.VERTICAL);
         headerText.setGravity(Gravity.CENTER_VERTICAL);
-        headerText.setPadding(dp(7), 0, 0, 0);
+        headerText.setPadding(dp(4), dp(8), dp(16), dp(8));
         TextView title = text("Pixel System", 21, WHITE, true);
         TextView title2 = text("App Manager", 21, WHITE, true);
-        TextView subtitle = text("프로필별 시스템 앱 관리", 11, Color.rgb(239, 218, 255), false);
+        TextView subtitle = text("프로필별 시스템 앱 관리", 11, Color.rgb(250, 226, 255), false);
         subtitle.setPadding(0, dp(5), 0, 0);
         headerText.addView(title);
         headerText.addView(title2);
         headerText.addView(subtitle);
-        header.addView(headerText, new LinearLayout.LayoutParams(0,
-                LinearLayout.LayoutParams.MATCH_PARENT, 1.0f));
+        FrameLayout.LayoutParams heroCopy = new FrameLayout.LayoutParams(
+                dp(198), FrameLayout.LayoutParams.MATCH_PARENT, Gravity.RIGHT | Gravity.CENTER_VERTICAL);
+        headerText.setBackground(background(0x34280A5A, 18, 0x45FFFFFF, dp(1)));
+        header.addView(headerText, heroCopy);
         root.addView(header, params(0, 0, 0, 12));
 
         LinearLayout statusCard = horizontal();
