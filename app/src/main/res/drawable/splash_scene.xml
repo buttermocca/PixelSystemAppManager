@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:drawable="@drawable/splash_background"
+        android:width="360dp"
+        android:height="810dp" />
+    <item
+        android:drawable="@drawable/ic_crescent_moon"
+        android:width="300dp"
+        android:height="300dp"
+        android:gravity="center_horizontal|top"
+        android:top="132dp" />
+    <item
+        android:drawable="@drawable/mascot_splash"
+        android:width="300dp"
+        android:height="300dp"
+        android:gravity="center_horizontal|top"
+        android:top="122dp" />
+</layer-list>
