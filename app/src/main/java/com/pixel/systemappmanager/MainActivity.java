@@ -797,18 +797,29 @@ public class MainActivity extends Activity {
         @Override public View getView(int position, View convertView, ViewGroup parent) {
             AppItem item = visibleApps.get(position);
             LinearLayout row;
+            ImageView appIcon;
             CheckBox check;
             TextView state;
             if (convertView instanceof LinearLayout && ((LinearLayout) convertView).getTag() instanceof View[]) {
                 row = (LinearLayout) convertView;
                 View[] refs = (View[]) row.getTag();
-                check = (CheckBox) refs[0];
-                state = (TextView) refs[1];
+                appIcon = (ImageView) refs[0];
+                check = (CheckBox) refs[1];
+                state = (TextView) refs[2];
             } else {
                 row = new LinearLayout(MainActivity.this);
                 row.setOrientation(LinearLayout.HORIZONTAL);
                 row.setGravity(Gravity.CENTER_VERTICAL);
-                row.setPadding(dp(8), dp(3), dp(8), dp(3));
+                row.setPadding(dp(8), dp(5), dp(8), dp(5));
+
+                appIcon = new ImageView(MainActivity.this);
+                appIcon.setScaleType(ImageView.ScaleType.FIT_CENTER);
+                appIcon.setPadding(dp(3), dp(3), dp(3), dp(3));
+                appIcon.setBackground(background(0x553A2580, 10, 0x88E9C9FF, dp(1)));
+                LinearLayout.LayoutParams iconLp = new LinearLayout.LayoutParams(dp(34), dp(34));
+                iconLp.rightMargin = dp(8);
+                row.addView(appIcon, iconLp);
+
                 check = new CheckBox(MainActivity.this);
                 check.setTextSize(12);
                 check.setTextColor(WHITE);
@@ -824,7 +835,12 @@ public class MainActivity extends Activity {
                 state.setPadding(dp(8), dp(6), dp(8), dp(6));
                 row.addView(state, new LinearLayout.LayoutParams(
                         LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT));
-                row.setTag(new View[]{check, state});
+                row.setTag(new View[]{appIcon, check, state});
+            }
+            try {
+                appIcon.setImageDrawable(getPackageManager().getApplicationIcon(item.name));
+            } catch (Exception ignored) {
+                appIcon.setImageResource(R.drawable.mascot_icon);
             }
             check.setOnCheckedChangeListener(null);
             check.setText(item.name);
