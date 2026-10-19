@@ -27,3 +27,12 @@ Magisk, KernelSU/KernelSU Next, APatch, or another root solution must provide `s
 ## Important
 
 `pm uninstall --user` removes availability for the selected user; it does not delete the underlying system APK. Removing system packages can still break features. Make a backup and verify each package's purpose before removal. The app includes confirmation prompts and blocks a small list of core packages, but cannot anticipate every device-specific dependency.
+
+
+## v1.5.0 visual design
+
+- A full-height amethyst-to-magenta background with pearlescent glows and sparkle flecks.
+- A rounded galaxy-gradient hero header featuring the waving mascot.
+- Separate mascot artwork roles: a tilted wink for the launcher icon, a waving pose in the header, and a crystal-origami pose on a crescent moon in the splash screen.
+- Purple glass-style profile, search, package summary, and list cards with high-contrast labels and luminous gradient action buttons.
+- App icons alongside package names in the system package list.
