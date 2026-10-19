@@ -5,15 +5,9 @@
         android:width="360dp"
         android:height="810dp" />
     <item
-        android:drawable="@drawable/ic_crescent_moon"
-        android:width="300dp"
-        android:height="300dp"
-        android:gravity="center_horizontal|top"
-        android:top="132dp" />
-    <item
         android:drawable="@drawable/mascot_splash"
-        android:width="300dp"
-        android:height="300dp"
+        android:width="320dp"
+        android:height="340dp"
         android:gravity="center_horizontal|top"
-        android:top="122dp" />
+        android:top="106dp" />
 </layer-list>
