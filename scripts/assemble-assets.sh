@@ -14,3 +14,11 @@ cat "$asset_dir/mascot.00.b64" "$asset_dir/mascot.01.b64" "$asset_dir/mascot.02.
 file "$output" | grep -qi 'web/p image'
 test "$(wc -c < "$output")" -gt 6000
 echo "Reassembled crystal mascot: $(wc -c < "$output") bytes"
+
+hero_output="app/src/main/res/drawable-nodpi/hero_art.webp"
+cat "$asset_dir/hero.00.b64" "$asset_dir/hero.01.b64" "$asset_dir/hero.02.b64" \
+  | tr -d '\r\n ' \
+  | base64 --decode > "$hero_output"
+file "$hero_output" | grep -qi 'web/p image'
+test "$(wc -c < "$hero_output")" -gt 6000
+echo "Reassembled galaxy hero scene: $(wc -c < "$hero_output") bytes"

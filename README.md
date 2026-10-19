@@ -43,3 +43,9 @@ Magisk, KernelSU/KernelSU Next, APatch, or another root solution must provide `s
 - Uses the high-detail crystal mascot bitmap without a square tile for the launcher icon.
 - Adds a crescent-moon mascot composition to the splash scene and a dedicated galaxy hero banner.
 - Reworks the main screen into violet glass cards with luminous magenta buttons, package icons, and pearl-like sparkle highlights.
+
+
+## v1.5.2 image-backed hero banner
+
+- The rounded main header now uses the full wide crystal-mascot scene artwork instead of a flat vector-only composition.
+- The build script reconstructs the artwork from small text chunks into WebP resources before Android resource compilation.
