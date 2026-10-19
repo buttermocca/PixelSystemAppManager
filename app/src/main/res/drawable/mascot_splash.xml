@@ -7,7 +7,7 @@
         android:left="0dp"
         android:top="30dp" />
     <item
-        android:drawable="@drawable/ic_mascot_wave"
+        android:drawable="@drawable/ic_mascot_foreground"
         android:width="245dp"
         android:height="245dp"
         android:left="42dp"
