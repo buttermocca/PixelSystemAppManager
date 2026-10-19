@@ -4,12 +4,12 @@
         android:drawable="@drawable/ic_crescent_moon"
         android:width="300dp"
         android:height="300dp"
-        android:left="0dp"
-        android:top="30dp" />
+        android:left="4dp"
+        android:top="22dp" />
     <item
-        android:drawable="@drawable/ic_mascot_foreground"
-        android:width="245dp"
-        android:height="245dp"
-        android:left="42dp"
-        android:top="12dp" />
+        android:drawable="@drawable/mascot_crystal"
+        android:width="236dp"
+        android:height="292dp"
+        android:left="36dp"
+        android:top="0dp" />
 </layer-list>
