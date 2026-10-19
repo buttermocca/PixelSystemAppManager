@@ -371,9 +371,30 @@ public class MainActivity extends Activity {
     }
 
     private void bindProfiles() {
-        ArrayAdapter<Profile> spinnerAdapter = new ArrayAdapter<>(
-                this, android.R.layout.simple_spinner_item, profiles);
+        ArrayAdapter<Profile> spinnerAdapter = new ArrayAdapter<Profile>(
+                this, android.R.layout.simple_spinner_item, profiles) {
+            @Override public View getView(int position, View convertView, ViewGroup parent) {
+                TextView item = (TextView) super.getView(position, convertView, parent);
+                item.setTextColor(WHITE);
+                item.setTextSize(14);
+                item.setPadding(dp(10), dp(8), dp(10), dp(8));
+                return item;
+            }
+
+            @Override public View getDropDownView(int position, View convertView, ViewGroup parent) {
+                TextView item = (TextView) super.getDropDownView(position, convertView, parent);
+                item.setTextColor(WHITE);
+                item.setTextSize(14);
+                item.setPadding(dp(14), dp(13), dp(14), dp(13));
+                item.setBackgroundColor(Color.rgb(48, 18, 94));
+                return item;
+            }
+        };
         spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        profileSpinner.setBackground(background(0x663B267C, 14, 0xBFFFFFFF, dp(1)));
+        profileSpinner.setPadding(dp(6), 0, dp(6), 0);
+        profileSpinner.setPopupBackgroundDrawable(background(Color.rgb(48, 18, 94), 16,
+                Color.rgb(219, 167, 255), dp(1)));
         profileSpinner.setAdapter(spinnerAdapter);
         int index = 0;
         for (int i = 0; i < profiles.size(); i++) {
