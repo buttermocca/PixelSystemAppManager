@@ -7,7 +7,7 @@
         android:left="4dp"
         android:top="22dp" />
     <item
-        android:drawable="@drawable/mascot_crystal"
+        android:drawable="@drawable/icon_art"
         android:width="236dp"
         android:height="292dp"
         android:left="36dp"
