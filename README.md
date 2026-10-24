@@ -73,3 +73,10 @@ Magisk, KernelSU/KernelSU Next, APatch, or another root solution must provide `s
 - The build now enlarges the banner to 1280px wide and the full-height splash to 1080px wide while applying light edge sharpening.
 - The application and fallback package-list icons use a 768px transparent mascot foreground; the build removes the simulated checkerboard backdrop instead of baking it into the icon.
 - The app keeps real installed-package icons where available so system packages remain identifiable.
+
+
+## v1.5.6 — launcher icon alpha correction
+
+- Preserve a real alpha channel on the mascot image instead of turning transparent pixels opaque during processing.
+- Place the foreground mascot inside the launcher safe area, leaving enough margin for circular and squircle masks.
+- The build asserts that the final icon foreground retains transparency.
