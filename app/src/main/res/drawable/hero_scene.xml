@@ -1,7 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layer-list xmlns:android="http://schemas.android.com/apk/res/android">
-    <item
-        android:drawable="@drawable/hero_art"
-        android:width="360dp"
-        android:height="180dp" />
+    <item android:drawable="@drawable/hero_art" />
 </layer-list>

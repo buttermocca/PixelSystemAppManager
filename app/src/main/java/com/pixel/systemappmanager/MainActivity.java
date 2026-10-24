@@ -96,10 +96,14 @@ public class MainActivity extends Activity {
         handler.postDelayed(() -> {
             if (!isFinishing()) {
                 configureSystemBars();
-                buildUi();
-                checkRoot();
+                try {
+                    buildUi();
+                    checkRoot();
+                } catch (Throwable error) {
+                    showStartupError(error);
+                }
             }
-        }, 1050);
+        }, 650);
     }
 
     private void configureSystemBars() {
@@ -121,7 +125,7 @@ public class MainActivity extends Activity {
         // A real full-bleed concept illustration—not a vector icon enlarged into a splash.
         FrameLayout splash = new FrameLayout(this);
         ImageView scene = new ImageView(this);
-        scene.setImageResource(R.drawable.splash_scene);
+        scene.setImageResource(R.drawable.splash_art);
         scene.setScaleType(ImageView.ScaleType.CENTER_CROP);
         scene.setContentDescription("크리스털 안드로이드와 별빛 바다");
         splash.addView(scene, new FrameLayout.LayoutParams(
@@ -169,6 +173,52 @@ public class MainActivity extends Activity {
         brand.animate().alpha(1f).setDuration(550).setStartDelay(160).start();
     }
 
+    /**
+     * Keep an actionable screen visible if an Android-version-specific view/resource
+     * failure occurs during startup. The previous build could close before showing
+     * any diagnostic when buildUi() threw.
+     */
+    private void showStartupError(Throwable error) {
+        LinearLayout fallback = new LinearLayout(this);
+        fallback.setOrientation(LinearLayout.VERTICAL);
+        fallback.setGravity(Gravity.CENTER);
+        fallback.setPadding(dp(24), dp(28), dp(24), dp(28));
+        GradientDrawable bg = new GradientDrawable(GradientDrawable.Orientation.TOP_BOTTOM,
+                new int[]{Color.rgb(19, 8, 58), Color.rgb(116, 22, 130), Color.rgb(196, 37, 153)});
+        fallback.setBackground(bg);
+
+        ImageView mascot = new ImageView(this);
+        mascot.setImageResource(R.drawable.icon_art);
+        mascot.setScaleType(ImageView.ScaleType.FIT_CENTER);
+        fallback.addView(mascot, new LinearLayout.LayoutParams(dp(150), dp(150)));
+
+        TextView title = text("시작 화면을 표시하지 못했습니다", 20, WHITE, true);
+        title.setGravity(Gravity.CENTER);
+        title.setPadding(0, dp(16), 0, dp(12));
+        fallback.addView(title);
+
+        String detail = error == null ? "알 수 없는 오류" :
+                error.getClass().getSimpleName() + ": " + String.valueOf(error.getMessage());
+        TextView details = text(clip(detail, 420), 12, Color.rgb(255, 226, 252), false);
+        details.setGravity(Gravity.CENTER);
+        fallback.addView(details);
+
+        Button retry = button("다시 시도", Color.rgb(83, 58, 185), 15);
+        LinearLayout.LayoutParams retryLp = new LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.MATCH_PARENT, dp(52));
+        retryLp.topMargin = dp(22);
+        fallback.addView(retry, retryLp);
+        retry.setOnClickListener(v -> {
+            try {
+                buildUi();
+                checkRoot();
+            } catch (Throwable retryError) {
+                showStartupError(retryError);
+            }
+        });
+        setContentView(fallback);
+    }
+
     private void buildUi() {
         LinearLayout root = new LinearLayout(this);
         root.setOrientation(LinearLayout.VERTICAL);
@@ -187,18 +237,18 @@ public class MainActivity extends Activity {
         }
 
         FrameLayout header = new FrameLayout(this);
-        header.setMinimumHeight(dp(174));
+        header.setMinimumHeight(dp(190));
         header.setBackground(new HeaderPearlDrawable());
         header.setClipToOutline(true);
         header.setElevation(dp(5));
 
         // The concept banner has the crystal-moon mascot on the left and clean text space at right.
         ImageView hero = new ImageView(this);
-        hero.setImageResource(R.drawable.hero_scene);
-        hero.setScaleType(ImageView.ScaleType.CENTER_CROP);
+        hero.setImageResource(R.drawable.hero_art);
+        hero.setScaleType(ImageView.ScaleType.FIT_XY);
         hero.setContentDescription("초승달 위의 크리스털 안드로이드와 은하수");
         header.addView(hero, new FrameLayout.LayoutParams(
-                FrameLayout.LayoutParams.MATCH_PARENT, dp(184)));
+                FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.MATCH_PARENT));
 
         View textShade = new View(this);
         GradientDrawable rightShade = new GradientDrawable(GradientDrawable.Orientation.LEFT_RIGHT,
@@ -222,7 +272,9 @@ public class MainActivity extends Activity {
                 dp(198), FrameLayout.LayoutParams.MATCH_PARENT, Gravity.RIGHT | Gravity.CENTER_VERTICAL);
         headerText.setBackgroundColor(Color.TRANSPARENT);
         header.addView(headerText, heroCopy);
-        root.addView(header, params(0, 0, 0, 12));
+        root.addView(header, new LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.MATCH_PARENT, dp(190)));
+        ((LinearLayout.LayoutParams) header.getLayoutParams()).bottomMargin = dp(12);
 
         LinearLayout statusCard = horizontal();
         statusCard.setGravity(Gravity.CENTER_VERTICAL);
@@ -369,7 +421,11 @@ public class MainActivity extends Activity {
                 else {
                     allApps.clear();
                     filterApps();
-                    log.setText("KernelSU / Magisk / APatch에서 이 앱의 루트 권한을 허용한 뒤 새로고침해 주세요.");
+                    String diagnostic = result.output == null || result.output.trim().isEmpty()
+                            ? "출력 없음 (종료 코드 " + result.exit + ")"
+                            : clip(result.output.trim(), 320);
+                    log.setText("루트 확인 결과: " + diagnostic +
+                            "\nKernelSU / Magisk / APatch의 앱 권한 목록에서 이 앱에 루트 권한을 허용한 뒤 새로고침해 주세요.");
                 }
             });
         });

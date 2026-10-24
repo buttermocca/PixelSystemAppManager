@@ -57,3 +57,12 @@ Magisk, KernelSU/KernelSU Next, APatch, or another root solution must provide `s
 - The launcher foreground uses a separate transparent, winking crystal-mascot image.
 - Profile, search, status, summary, and package-list panels use filled translucent violet glass surfaces with luminous pale-pink outlines. The hero title sits directly over the galaxy artwork without a nested card.
 - The build reassembles the reviewable WebP source chunks before resource compilation and validates that each image is a genuine WebP file.
+
+
+## v1.5.4 — startup and artwork layout fixes
+
+- Draw the splash and banner from their image resources directly, avoiding the prior layer-list sizing/cropping behavior.
+- Give the title banner a fixed height so its text and artwork cannot unexpectedly stretch the top panel.
+- Show a diagnostic retry screen instead of silently closing if UI construction fails.
+- Display the actual `su` check output when root access is not granted, and declare package visibility for Android's package-manager icon lookup.
+- Adaptive launcher icons use a violet/magenta background and an inset mascot foreground to avoid the old checkerboard/cropped icon appearance.
