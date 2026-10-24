@@ -66,3 +66,10 @@ Magisk, KernelSU/KernelSU Next, APatch, or another root solution must provide `s
 - Show a diagnostic retry screen instead of silently closing if UI construction fails.
 - Display the actual `su` check output when root access is not granted, and declare package visibility for Android's package-manager icon lookup.
 - Adaptive launcher icons use a violet/magenta background and an inset mascot foreground to avoid the old checkerboard/cropped icon appearance.
+
+
+## v1.5.5 — high-density artwork processing
+
+- The build now enlarges the banner to 1280px wide and the full-height splash to 1080px wide while applying light edge sharpening.
+- The application and fallback package-list icons use a 768px transparent mascot foreground; the build removes the simulated checkerboard backdrop instead of baking it into the icon.
+- The app keeps real installed-package icons where available so system packages remain identifiable.

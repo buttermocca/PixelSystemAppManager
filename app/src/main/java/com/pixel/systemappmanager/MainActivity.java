@@ -951,7 +951,7 @@ public class MainActivity extends Activity {
             try {
                 appIcon.setImageDrawable(getPackageManager().getApplicationIcon(item.name));
             } catch (Exception ignored) {
-                appIcon.setImageResource(R.drawable.mascot_icon);
+                appIcon.setImageResource(R.drawable.icon_art);
             }
             check.setOnCheckedChangeListener(null);
             check.setText(item.name);

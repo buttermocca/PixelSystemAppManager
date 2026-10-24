@@ -44,3 +44,8 @@ assemble_webp "$out_dir/icon_art.webp" \
   "$asset_dir/icon-real.02.b64" \
   "$asset_dir/icon-real.03.b64"
 test "$(wc -c < "$out_dir/icon_art.webp")" -gt 8000
+
+# Smoothly prepare the artwork for modern high-density Android screens.
+# The icon source contains a simulated gray/white checkerboard (not alpha);
+# remove connected neutral background pixels, then enlarge it with a protected margin.
+python3 scripts/process-art-assets.py "$out_dir"

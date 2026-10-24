@@ -37,7 +37,15 @@ jobs:
           yes | sdkmanager --licenses >/dev/null || true
           sdkmanager "platforms;android-36" "build-tools;36.0.0" "platform-tools"
 
-      - name: Assemble concept artwork assets
+      - name: Set up Python for artwork processing
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install artwork processing dependency
+        run: python -m pip install --upgrade pip Pillow
+
+      - name: Assemble and process concept artwork assets
         run: bash scripts/assemble-assets.sh
 
       - name: Build debug APK
