@@ -220,14 +220,14 @@ public class MainActivity extends Activity {
         headerText.addView(subtitle);
         FrameLayout.LayoutParams heroCopy = new FrameLayout.LayoutParams(
                 dp(198), FrameLayout.LayoutParams.MATCH_PARENT, Gravity.RIGHT | Gravity.CENTER_VERTICAL);
-        headerText.setBackground(background(0x34280A5A, 18, 0x45FFFFFF, dp(1)));
+        headerText.setBackgroundColor(Color.TRANSPARENT);
         header.addView(headerText, heroCopy);
         root.addView(header, params(0, 0, 0, 12));
 
         LinearLayout statusCard = horizontal();
         statusCard.setGravity(Gravity.CENTER_VERTICAL);
         statusCard.setPadding(dp(12), dp(9), dp(12), dp(9));
-        statusCard.setBackground(background(0x483B167A, 16, 0xC8F8E6FF, dp(1)));
+        statusCard.setBackground(background(0xBA29116D, 18, 0xF0E7FFFF, dp(1)));
         statusCard.setElevation(dp(4));
         TextView statusDot = text("●", 12, MINT, true);
         statusCard.addView(statusDot, new LinearLayout.LayoutParams(dp(20), dp(22)));
@@ -264,7 +264,7 @@ public class MainActivity extends Activity {
         search.setHintTextColor(Color.rgb(226, 206, 250));
         search.setHint("⌕   패키지명 검색 (예: com.google)");
         search.setPadding(dp(15), dp(5), dp(15), dp(5));
-        search.setBackground(background(0x3BFFFFFF, 18, 0xC9F7E7FF, dp(1)));
+        search.setBackground(background(0xBB7733A0, 18, 0xE8F2D9FF, dp(1)));
         search.setElevation(dp(2));
         root.addView(search, params(0, 0, 0, 8));
         search.addTextChangedListener(new TextWatcher() {
@@ -305,7 +305,7 @@ public class MainActivity extends Activity {
         restore.setOnClickListener(v -> confirmOperation(false));
 
         FrameLayout listFrame = new FrameLayout(this);
-        listFrame.setBackground(background(0x45301770, 22, 0xC8F8E7FF, dp(1)));
+        listFrame.setBackground(background(0xB32D126B, 22, 0xE8F8E7FF, dp(1)));
         listFrame.setElevation(dp(3));
         listFrame.setClipToOutline(true);
         listView = new ListView(this);
@@ -396,7 +396,7 @@ public class MainActivity extends Activity {
             }
         };
         spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        profileSpinner.setBackground(background(0x663B267C, 14, 0xBFFFFFFF, dp(1)));
+        profileSpinner.setBackground(background(0xB56D389E, 16, 0xE8F6DDFF, dp(1)));
         profileSpinner.setPadding(dp(6), 0, dp(6), 0);
         profileSpinner.setPopupBackgroundDrawable(background(Color.rgb(48, 18, 94), 16,
                 Color.rgb(219, 167, 255), dp(1)));
@@ -589,7 +589,7 @@ public class MainActivity extends Activity {
         LinearLayout result = new LinearLayout(this);
         result.setOrientation(LinearLayout.VERTICAL);
         result.setPadding(dp(14), dp(12), dp(14), dp(12));
-        result.setBackground(background(0x49321A78, 20, 0xBFF7E7FF, dp(1)));
+        result.setBackground(background(0xB72D126E, 20, 0xE8F7E7FF, dp(1)));
         result.setElevation(dp(3));
         return result;
     }

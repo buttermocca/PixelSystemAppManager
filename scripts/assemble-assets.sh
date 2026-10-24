@@ -1,24 +1,46 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-# Asset text is split into small chunks to keep source-file uploads robust.
-# Reassemble the original binary WebP before Android resource compilation.
+# The art is stored as small base64 text pieces so every change is reviewable.
+# Rebuild the real WebP artwork before Android resource compilation.
 asset_dir=".github/assets"
-output="app/src/main/res/drawable-nodpi/mascot_crystal.webp"
-mkdir -p "$(dirname "$output")"
-cat "$asset_dir/mascot.00.b64" "$asset_dir/mascot.01.b64" "$asset_dir/mascot.02.b64" \
-  | tr -d '\r\n ' \
-  | base64 --decode > "$output"
+out_dir="app/src/main/res/drawable-nodpi"
+mkdir -p "$out_dir"
 
-# Fail early if the resource is not a genuine WebP file.
-file "$output" | grep -qi 'web/p image'
-test "$(wc -c < "$output")" -gt 6000
-echo "Reassembled crystal mascot: $(wc -c < "$output") bytes"
+assemble_webp() {
+  local output="$1"
+  shift
+  cat "$@" | tr -d '\r\n ' | base64 --decode > "$output"
+  file "$output" | grep -qi 'web/p image'
+  echo "Created $output ($(wc -c < "$output") bytes)"
+}
 
-hero_output="app/src/main/res/drawable-nodpi/hero_art.webp"
-cat "$asset_dir/hero.00.b64" "$asset_dir/hero.01.b64" "$asset_dir/hero.02.b64" \
-  | tr -d '\r\n ' \
-  | base64 --decode > "$hero_output"
-file "$hero_output" | grep -qi 'web/p image'
-test "$(wc -c < "$hero_output")" -gt 6000
-echo "Reassembled galaxy hero scene: $(wc -c < "$hero_output") bytes"
+assemble_webp "$out_dir/hero_art.webp" \
+  "$asset_dir/hero-real.00.b64" \
+  "$asset_dir/hero-real.01.b64" \
+  "$asset_dir/hero-real.02.b64"
+test "$(wc -c < "$out_dir/hero_art.webp")" -gt 5000
+
+assemble_webp "$out_dir/splash_art.webp" \
+  "$asset_dir/splash-real.00.b64" \
+  "$asset_dir/splash-real.01.b64" \
+  "$asset_dir/splash-real.02.b64" \
+  "$asset_dir/splash-real.03.b64" \
+  "$asset_dir/splash-real.04.b64" \
+  "$asset_dir/splash-real.05.b64" \
+  "$asset_dir/splash-real.06.b64" \
+  "$asset_dir/splash-real.07.b64" \
+  "$asset_dir/splash-real.08.b64" \
+  "$asset_dir/splash-real.09.b64" \
+  "$asset_dir/splash-real.10.b64" \
+  "$asset_dir/splash-real.11.b64"
+test "$(wc -c < "$out_dir/splash_art.webp")" -gt 20000
+
+assemble_webp "$out_dir/icon_art.webp" \
+  "$asset_dir/icon-real.00.b64" \
+  "$asset_dir/icon-real.01a.b64" \
+  "$asset_dir/icon-real.01b.b64" \
+  "$asset_dir/icon-real.01c.b64" \
+  "$asset_dir/icon-real.02.b64" \
+  "$asset_dir/icon-real.03.b64"
+test "$(wc -c < "$out_dir/icon_art.webp")" -gt 8000

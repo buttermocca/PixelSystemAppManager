@@ -49,3 +49,11 @@ Magisk, KernelSU/KernelSU Next, APatch, or another root solution must provide `s
 
 - The rounded main header now uses the full wide crystal-mascot scene artwork instead of a flat vector-only composition.
 - The build script reconstructs the artwork from small text chunks into WebP resources before Android resource compilation.
+
+
+## v1.5.3 — concept artwork integration
+
+- The header banner and portrait splash now use full image-backed crystal-mascot artwork rather than enlarging the simplified vector mascot.
+- The launcher foreground uses a separate transparent, winking crystal-mascot image.
+- Profile, search, status, summary, and package-list panels use filled translucent violet glass surfaces with luminous pale-pink outlines. The hero title sits directly over the galaxy artwork without a nested card.
+- The build reassembles the reviewable WebP source chunks before resource compilation and validates that each image is a genuine WebP file.
